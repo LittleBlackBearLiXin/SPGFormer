@@ -31,12 +31,7 @@ def fix_seed(seed):
 MODEL='SPGformer'
 FLAG = 1
 Seed_List = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-
-
-
 OA_ALL, AA_ALL, KPP_ALL, AVG_ALL = [], [], [], []
-Train_Time_ALL, Test_Time_ALL = [], []
 data, gt, class_count, dataset_name = load_dataset(FLAG)
 
 
@@ -64,19 +59,10 @@ for curr_seed in Seed_List:
     for i in range(max_epoch + 1):
         net.train()
         optimizer.zero_grad()
-        start_time = time.time()
-        start_memory = torch.cuda.memory_allocated()
         output = net(net_input)
-        end_time = time.time()
-        end_memory = torch.cuda.memory_allocated()
-        if i == 100:
-            print(end_time - start_time)
-            print(f"Memory used for inference: {(end_memory - start_memory) / (1024 ** 3):.2f} GB")
-
         loss = compute_loss(output, train_onehot_tensor, train_mask_tensor)
         loss.backward()
         optimizer.step()
-
         if math.isnan(loss):
             print("Loss is NaN, stopping training.")
             #torch.save(net.state_dict(), "model/best_model.pt")
@@ -101,10 +87,6 @@ for curr_seed in Seed_List:
                                              printFlag=False)
                 print(f"{i + 1}\ttrain loss={loss:.4f} train OA={trainOA:.4f} val loss={valloss:.4f} val OA={valOA:.4f}")
 
-    toc1 = time.time()
-    training_time = toc1 - tic1
-    Train_Time_ALL.append(training_time)
-
     with torch.no_grad():
         net.load_state_dict(torch.load("model/best_model.pt", weights_only=True))
         with open("model/best_model.pt", "w") as f:
@@ -114,9 +96,7 @@ for curr_seed in Seed_List:
         else:
             print(f"file is None")
         net.eval()
-        tic2 = time.time()
         output = net(net_input)
-        toc2 = time.time()
         testloss = compute_loss(output, test_onehot_tensor, test_mask_tensor)
         testOA, testAA, testKappa, acc_list = evaluate_performance(
             output, test_gt_tensor, test_onehot_tensor, class_count,
@@ -126,7 +106,6 @@ for curr_seed in Seed_List:
         print(
             f"Training runs:{curr_seed + 1}\n[test loss={testloss:.4f} test OA={testOA:.4f} test AA={testAA:.4f} test KPA={testKappa:.4f}]\ntest peracc=[{acc_str}]")
 
-        Test_Time_ALL.append((toc2 - tic2))
 
     OA_ALL.append(testOA.cpu() if torch.is_tensor(testOA) else testOA)
     AA_ALL.append(testAA)
@@ -140,8 +119,7 @@ OA_ALL = np.array([x.cpu().numpy() if torch.is_tensor(x) else x for x in OA_ALL]
 AA_ALL = np.array(AA_ALL)
 KPP_ALL = np.array(KPP_ALL)
 AVG_ALL = np.array(AVG_ALL)
-Train_Time_ALL = np.array(Train_Time_ALL)
-Test_Time_ALL = np.array(Test_Time_ALL)
+
 
 print("==============================================================================")
 
@@ -151,5 +129,6 @@ print('Kpp=', np.mean(KPP_ALL)*100, '+-', np.std(KPP_ALL)*100)
 print('AVG=', np.mean(AVG_ALL, 0), '+-', np.std(AVG_ALL, 0))
 print("Average training time:", np.mean(Train_Time_ALL))
 print("Average testing time:", np.mean(Test_Time_ALL))
+
 
 
