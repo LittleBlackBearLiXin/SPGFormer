@@ -1,11 +1,11 @@
 # SPGFormer
 SPGFormer: A Sparse Graph Transformer for Hyperspectral Image Classification
-#This work has been submitted to: IEEE Transactions on Geoscience and Remote Sensing for consideration.
+#Submitted to: IEEE Transactions on Geoscience and Remote Sensing for consideration.
 
 #Now that you're all here, don't forget to click on the little star!!!!!!!!!!!!!!!!!!!!!!!
 
 #If you use our method, please cite our paper: 《SPGFormer: A Sparse Graph Transformer for Hyperspectral Image Classification》
-#Xin Li, Xitong Xu, and Shengbo Chen
+
 
 #Before running the code, you need to download some installation packages: pip install scipy spectral scikit-learn scikit-image opencv-python torch-geometric，seaborn "numpy<2" --upgrade einops
 
