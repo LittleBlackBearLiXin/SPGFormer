@@ -143,8 +143,8 @@ def simfunction(mask):
     mask_index, mask_attr = add_self_loops(mask_index, mask_attr, num_nodes=mask.size(0))
 
     src, dst = mask_index[0], mask_index[1]
-    row_sum = scatter_add((mask_attr), src, dim_size=mask.shape[0])**0.5
-    col_sum = scatter_add((mask_attr), dst, dim_size=mask.shape[0]) ** 0.5
+    row_sum = scatter_add((mask_attr), src, dim_size=mask.shape[0])**(-0.5)
+    col_sum = scatter_add((mask_attr), dst, dim_size=mask.shape[0])**(-0.5)
     att = (row_sum[src]) * mask_attr * (col_sum[dst])
 
     mask = torch.sparse_coo_tensor(
@@ -223,5 +223,6 @@ def PSPT_process_mask(net_input, device,FLAG=-1):
     col_mask = get_mask(net_input, device, num_subgraphs=col_num_subgraphs, token=col_top_k, row=False)
     rowmask = simfunction(row_mask)
     colmask = simfunction(col_mask)
+
 
     return rowmask,colmask
