@@ -11,7 +11,6 @@ from modelpre import prepare_model
 import os
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-
 def labelratio(train_gt,test_gt,val_gt,classcout):
     for i in range(classcout):
         if i>0:
@@ -27,13 +26,11 @@ def fix_seed(seed):
     torch.backends.cudnn.benchmark = False
     os.environ['PYTHONHASHSEED'] = str(seed)
 
-
 MODEL='SPGformer'
 FLAG = 1
 Seed_List = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 OA_ALL, AA_ALL, KPP_ALL, AVG_ALL = [], [], [], []
 data, gt, class_count, dataset_name = load_dataset(FLAG)
-
 
 for curr_seed in Seed_List:
     (train_gt, val_gt, test_gt,
@@ -50,12 +47,7 @@ for curr_seed in Seed_List:
 
     optimizer = torch.optim.Adam(net.parameters(), lr=learning_rate,weight_decay=WEIGHT_DECAY)
     torch.cuda.empty_cache()
-
-
-
     best_loss = float('inf')
-    tic1 = time.time()
-
     for i in range(max_epoch + 1):
         net.train()
         optimizer.zero_grad()
@@ -67,8 +59,6 @@ for curr_seed in Seed_List:
             print("Loss is NaN, stopping training.")
             #torch.save(net.state_dict(), "model/best_model.pt")
             break
-
-
         with torch.no_grad():
             net.eval()
             output= net(net_input)
@@ -77,7 +67,6 @@ for curr_seed in Seed_List:
                 best_loss = valloss
                 torch.save(net.state_dict(), "model/best_model.pt")
                 #print("save model...")
-
             torch.cuda.empty_cache()
             if i % 100 == 0:
                 trainOA = evaluate_performance(output, train_gt_tensor, train_onehot_tensor, class_count,
@@ -102,34 +91,27 @@ for curr_seed in Seed_List:
         testOA, testAA, testKappa, acc_list = evaluate_performance(
             output, test_gt_tensor, test_onehot_tensor, class_count,
             require_detail=True, printFlag=False)
-
         acc_str = ', '.join([f"{x:.4f}" for x in acc_list])
         print(
             f"Training runs:{curr_seed + 1}\n[test loss={testloss:.4f} test OA={testOA:.4f} test AA={testAA:.4f} test KPA={testKappa:.4f}]\ntest peracc=[{acc_str}]")
-
-
     OA_ALL.append(testOA.cpu() if torch.is_tensor(testOA) else testOA)
     AA_ALL.append(testAA)
     KPP_ALL.append(testKappa)
     AVG_ALL.append(acc_list)
     del net
     torch.cuda.empty_cache()
-
-
+    
 OA_ALL = np.array([x.cpu().numpy() if torch.is_tensor(x) else x for x in OA_ALL])
 AA_ALL = np.array(AA_ALL)
 KPP_ALL = np.array(KPP_ALL)
 AVG_ALL = np.array(AVG_ALL)
-
-
 print("==============================================================================")
-
 print('OA=', np.mean(OA_ALL)*100, '+-', np.std(OA_ALL)*100)
 print('AA=', np.mean(AA_ALL)*100, '+-', np.std(AA_ALL)*100)
 print('Kpp=', np.mean(KPP_ALL)*100, '+-', np.std(KPP_ALL)*100)
 print('AVG=', np.mean(AVG_ALL, 0), '+-', np.std(AVG_ALL, 0))
-print("Average training time:", np.mean(Train_Time_ALL))
-print("Average testing time:", np.mean(Test_Time_ALL))
+
+
 
 
 
