@@ -71,6 +71,7 @@ for curr_seed in Seed_List:
 
         with torch.no_grad():
             net.eval()
+            output= net(net_input)
             valloss = compute_loss(output, val_onehot_tensor, val_mask_tensor)
             if valloss < best_loss:
                 best_loss = valloss
@@ -129,6 +130,7 @@ print('Kpp=', np.mean(KPP_ALL)*100, '+-', np.std(KPP_ALL)*100)
 print('AVG=', np.mean(AVG_ALL, 0), '+-', np.std(AVG_ALL, 0))
 print("Average training time:", np.mean(Train_Time_ALL))
 print("Average testing time:", np.mean(Test_Time_ALL))
+
 
 
 
