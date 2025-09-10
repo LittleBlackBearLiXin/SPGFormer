@@ -13,7 +13,6 @@ def prepare_model(MODEL, FLAG, data, gt,train_gt, val_gt, test_gt,
 
     net_input, train_gt_tensor, val_gt_tensor, test_gt_tensor = None, None, None, None
     train_onehot_tensor, val_onehot_tensor, test_onehot_tensor = None, None, None
-    train_mask_tensor, val_mask_tensor, test_mask_tensor = None, None, None
     net = None
     superpixel_scale = None
 
@@ -26,8 +25,7 @@ def prepare_model(MODEL, FLAG, data, gt,train_gt, val_gt, test_gt,
             superpixel_scale = 300
         net_input, \
         train_gt_tensor, val_gt_tensor, test_gt_tensor, \
-        train_onehot_tensor, val_onehot_tensor, test_onehot_tensor, \
-        train_mask_tensor, val_mask_tensor, test_mask_tensor, \
+        train_onehot_tensor, val_onehot_tensor, test_onehot_tensor
         net = ours_model_inputs(
             data, gt,train_gt, val_gt, test_gt,
             train_onehot, val_onehot, test_onehot,
@@ -38,8 +36,7 @@ def prepare_model(MODEL, FLAG, data, gt,train_gt, val_gt, test_gt,
             WEIGHT_DECAY=1e-4
         net_input, \
         train_gt_tensor, val_gt_tensor, test_gt_tensor, \
-        train_onehot_tensor, val_onehot_tensor, test_onehot_tensor, \
-        train_mask_tensor, val_mask_tensor, test_mask_tensor, \
+        train_onehot_tensor, val_onehot_tensor, test_onehot_tensor
         net = PSPT_inputs(
             data, gt, train_gt, val_gt, test_gt,
             train_onehot, val_onehot, test_onehot,
@@ -54,8 +51,7 @@ def prepare_model(MODEL, FLAG, data, gt,train_gt, val_gt, test_gt,
             superpixel_scale = 300
         net_input, \
         train_gt_tensor, val_gt_tensor, test_gt_tensor, \
-        train_onehot_tensor, val_onehot_tensor, test_onehot_tensor, \
-        train_mask_tensor, val_mask_tensor, test_mask_tensor, \
+        train_onehot_tensor, val_onehot_tensor, test_onehot_tensor
         net = mmpn_inputs(
             data, gt, train_gt, val_gt, test_gt,
             train_onehot, val_onehot, test_onehot,
@@ -70,8 +66,7 @@ def prepare_model(MODEL, FLAG, data, gt,train_gt, val_gt, test_gt,
             superpixel_scale = 300
         net_input, \
         train_gt_tensor, val_gt_tensor, test_gt_tensor, \
-        train_onehot_tensor, val_onehot_tensor, test_onehot_tensor, \
-        train_mask_tensor, val_mask_tensor, test_mask_tensor, \
+        train_onehot_tensor, val_onehot_tensor, test_onehot_tensor
         net = Combine_model_inputs(
             data, gt, train_gt, val_gt, test_gt,
             train_onehot, val_onehot, test_onehot,
@@ -84,6 +79,6 @@ def prepare_model(MODEL, FLAG, data, gt,train_gt, val_gt, test_gt,
     return net_input, \
            train_gt_tensor, val_gt_tensor, test_gt_tensor, \
            train_onehot_tensor, val_onehot_tensor, test_onehot_tensor, \
-           train_mask_tensor, val_mask_tensor, test_mask_tensor, \
            net,\
            learning_rate, WEIGHT_DECAY, max_epoch
+
