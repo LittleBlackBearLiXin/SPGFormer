@@ -13,10 +13,8 @@ def draw_classification_map(label, path, scale=4.0, dpi=400):
     plt.close()
 
 
-def compute_loss(predict: torch.Tensor, reallabel_onehot: torch.Tensor, reallabel_mask: torch.Tensor):
-    real_labels = reallabel_onehot
-    we = -torch.mul(real_labels, torch.log(predict))
-    we = torch.mul(we, reallabel_mask)
+def compute_loss(predict: torch.Tensor, reallabel_onehot: torch.Tensor):
+    we = -torch.mul(reallabel_onehot, torch.log(predict))
     pool_cross_entropy = torch.sum(we)
     return pool_cross_entropy
 
@@ -74,6 +72,7 @@ def evaluate_performance(output, gt, onehot, class_count,
             f.write("Per-class acc=" + str(acc_per_class) + "\n")
 
     return OA, AA, kappa, acc_per_class
+
 
 
 
