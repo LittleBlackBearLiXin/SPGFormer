@@ -9,7 +9,6 @@ def prepare_model(MODEL, FLAG, data, gt,train_gt, val_gt, test_gt,
     learning_rate = 5e-4
     WEIGHT_DECAY = 0
     max_epoch = 500
-    #NN = "SGCNCNN"#CNNMPNN,SGCNCNN,SGCNPSPT,CNNPSPT
 
     net_input, train_gt_tensor, val_gt_tensor, test_gt_tensor = None, None, None, None
     train_onehot_tensor, val_onehot_tensor, test_onehot_tensor = None, None, None
@@ -40,5 +39,6 @@ def prepare_model(MODEL, FLAG, data, gt,train_gt, val_gt, test_gt,
            train_onehot_tensor, val_onehot_tensor, test_onehot_tensor, \
            net,\
            learning_rate, WEIGHT_DECAY, max_epoch
+
 
 
