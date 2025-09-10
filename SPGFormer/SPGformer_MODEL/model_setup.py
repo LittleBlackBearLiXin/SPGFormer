@@ -17,21 +17,6 @@ def ours_model_inputs(data,gt,
                          class_count, superpixel_scale, device,FLAG):
     print('useing SPGformer')
     height, width, bands = data.shape
-    m, n = height, width
-    total = m * n
-
-    def create_mask(gt_2d):
-        mask = np.zeros((total, class_count), dtype=np.float32)
-        flat = gt_2d.reshape(-1)
-        for i in range(total):
-            if flat[i] != 0:
-                mask[i] = np.ones(class_count, dtype=np.float32)
-        return mask
-
-    train_mask = create_mask(train_gt)
-    val_mask = create_mask(val_gt)
-    test_mask = create_mask(test_gt)
-
 
     ls = Segmenttttt(data, class_count - 1)
     tic0 = time.perf_counter()
@@ -41,8 +26,6 @@ def ours_model_inputs(data,gt,
     print("LDA-SLIC costs time: ", LDA_SLIC_Time)
     Q = torch.from_numpy(Q).to(device)
     A = torch.from_numpy(A).to(device)
-
-
 
 
     def to_tensor(x):
@@ -55,10 +38,6 @@ def ours_model_inputs(data,gt,
     train_onehot_tensor = to_tensor(train_onehot)
     val_onehot_tensor = to_tensor(val_onehot)
     test_onehot_tensor = to_tensor(test_onehot)
-
-    train_mask_tensor = to_tensor(train_mask)
-    val_mask_tensor = to_tensor(val_mask)
-    test_mask_tensor = to_tensor(test_mask)
 
     net_input = to_tensor(np.array(data, dtype=np.float32))
     if FLAG == 1:
@@ -86,7 +65,6 @@ def ours_model_inputs(data,gt,
     return (net_input,
             train_gt_tensor, val_gt_tensor, test_gt_tensor,
             train_onehot_tensor, val_onehot_tensor, test_onehot_tensor,
-            train_mask_tensor, val_mask_tensor, test_mask_tensor,
             net)
 
 
@@ -99,23 +77,6 @@ def PSPT_inputs(data,gt,
                          class_count, superpixel_scale, device,FLAG):
     print('useing PSPT')
     height, width, bands = data.shape
-    m, n = height, width
-    total = m * n
-
-    def create_mask(gt_2d):
-        mask = np.zeros((total, class_count), dtype=np.float32)
-        flat = gt_2d.reshape(-1)
-        for i in range(total):
-            if flat[i] != 0:
-                mask[i] = np.ones(class_count, dtype=np.float32)
-        return mask
-
-    train_mask = create_mask(train_gt)
-    val_mask = create_mask(val_gt)
-    test_mask = create_mask(test_gt)
-
-
-
     def to_tensor(x):
         return torch.from_numpy(x.astype(np.float32)).to(device)
 
@@ -127,9 +88,6 @@ def PSPT_inputs(data,gt,
     val_onehot_tensor = to_tensor(val_onehot)
     test_onehot_tensor = to_tensor(test_onehot)
 
-    train_mask_tensor = to_tensor(train_mask)
-    val_mask_tensor = to_tensor(val_mask)
-    test_mask_tensor = to_tensor(test_mask)
 
     net_input = to_tensor(np.array(data, dtype=np.float32))
     if FLAG == 1:
@@ -163,7 +121,6 @@ def PSPT_inputs(data,gt,
     return (net_input,
             train_gt_tensor, val_gt_tensor, test_gt_tensor,
             train_onehot_tensor, val_onehot_tensor, test_onehot_tensor,
-            train_mask_tensor, val_mask_tensor, test_mask_tensor,
             net)
 
 
@@ -175,21 +132,6 @@ def mmpn_inputs(data,gt,
                          class_count, superpixel_scale, device,FLAG):
     print('useing MMPN')
     height, width, bands = data.shape
-    m, n = height, width
-    total = m * n
-
-    def create_mask(gt_2d):
-        mask = np.zeros((total, class_count), dtype=np.float32)
-        flat = gt_2d.reshape(-1)
-        for i in range(total):
-            if flat[i] != 0:
-                mask[i] = np.ones(class_count, dtype=np.float32)
-        return mask
-
-    train_mask = create_mask(train_gt)
-    val_mask = create_mask(val_gt)
-    test_mask = create_mask(test_gt)
-
 
     ls = Segmenttttt(data, class_count - 1)
     tic0 = time.perf_counter()
@@ -213,10 +155,6 @@ def mmpn_inputs(data,gt,
     train_onehot_tensor = to_tensor(train_onehot)
     val_onehot_tensor = to_tensor(val_onehot)
     test_onehot_tensor = to_tensor(test_onehot)
-
-    train_mask_tensor = to_tensor(train_mask)
-    val_mask_tensor = to_tensor(val_mask)
-    test_mask_tensor = to_tensor(test_mask)
 
     net_input = to_tensor(np.array(data, dtype=np.float32))
     if FLAG == 1:
@@ -240,7 +178,6 @@ def mmpn_inputs(data,gt,
     return (net_input,
             train_gt_tensor, val_gt_tensor, test_gt_tensor,
             train_onehot_tensor, val_onehot_tensor, test_onehot_tensor,
-            train_mask_tensor, val_mask_tensor, test_mask_tensor,
             net)
 
 
@@ -253,20 +190,6 @@ def Combine_model_inputs(data,gt,
                          class_count, superpixel_scale, device,FLAG,MODEL):
     print('useing COMbine')
     height, width, bands = data.shape
-    m, n = height, width
-    total = m * n
-
-    def create_mask(gt_2d):
-        mask = np.zeros((total, class_count), dtype=np.float32)
-        flat = gt_2d.reshape(-1)
-        for i in range(total):
-            if flat[i] != 0:
-                mask[i] = np.ones(class_count, dtype=np.float32)
-        return mask
-
-    train_mask = create_mask(train_gt)
-    val_mask = create_mask(val_gt)
-    test_mask = create_mask(test_gt)
 
 
     ls = Segmenttttt(data, class_count - 1)
@@ -292,9 +215,6 @@ def Combine_model_inputs(data,gt,
     val_onehot_tensor = to_tensor(val_onehot)
     test_onehot_tensor = to_tensor(test_onehot)
 
-    train_mask_tensor = to_tensor(train_mask)
-    val_mask_tensor = to_tensor(val_mask)
-    test_mask_tensor = to_tensor(test_mask)
 
     net_input = to_tensor(np.array(data, dtype=np.float32))
     if FLAG == 1:
@@ -331,5 +251,5 @@ def Combine_model_inputs(data,gt,
     return (net_input,
             train_gt_tensor, val_gt_tensor, test_gt_tensor,
             train_onehot_tensor, val_onehot_tensor, test_onehot_tensor,
-            train_mask_tensor, val_mask_tensor, test_mask_tensor,
             net)
+
