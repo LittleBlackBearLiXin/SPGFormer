@@ -13,11 +13,11 @@ def draw_classification_map(label, path, scale=4.0, dpi=400):
     plt.close()
 
 
-def compute_loss(predict: torch.Tensor, reallabel_onehot: torch.Tensor):
+def compute_loss(predict: torch.Tensor, reallabel_onehot: torch.Tensor, reallabel_mask: torch.Tensor):
     we = -torch.mul(reallabel_onehot, torch.log(predict))
+    we = torch.mul(we, reallabel_mask)
     pool_cross_entropy = torch.sum(we)
     return pool_cross_entropy
-
 
 
 
