@@ -41,7 +41,6 @@ for curr_seed in Seed_List:
     (net_input,
      train_gt_tensor, val_gt_tensor, test_gt_tensor,
      train_onehot_tensor, val_onehot_tensor, test_onehot_tensor,
-     train_mask_tensor, val_mask_tensor, test_mask_tensor,
      net, learning_rate, WEIGHT_DECAY, max_epoch)=prepare_model(MODEL, FLAG, data, gt,train_gt, val_gt, test_gt,
                   train_onehot, val_onehot, test_onehot, class_count, device)
 
@@ -52,7 +51,7 @@ for curr_seed in Seed_List:
         net.train()
         optimizer.zero_grad()
         output = net(net_input)
-        loss = compute_loss(output, train_onehot_tensor, train_mask_tensor)
+        loss = compute_loss(output, train_onehot_tensor)
         loss.backward()
         optimizer.step()
         if math.isnan(loss):
@@ -62,7 +61,7 @@ for curr_seed in Seed_List:
         with torch.no_grad():
             net.eval()
             output= net(net_input)
-            valloss = compute_loss(output, val_onehot_tensor, val_mask_tensor)
+            valloss = compute_loss(output, val_onehot_tensor)
             if valloss < best_loss:
                 best_loss = valloss
                 torch.save(net.state_dict(), "model/best_model.pt")
@@ -87,13 +86,12 @@ for curr_seed in Seed_List:
             print(f"file is None")
         net.eval()
         output = net(net_input)
-        testloss = compute_loss(output, test_onehot_tensor, test_mask_tensor)
         testOA, testAA, testKappa, acc_list = evaluate_performance(
             output, test_gt_tensor, test_onehot_tensor, class_count,
             require_detail=True, printFlag=False)
         acc_str = ', '.join([f"{x:.4f}" for x in acc_list])
         print(
-            f"Training runs:{curr_seed + 1}\n[test loss={testloss:.4f} test OA={testOA:.4f} test AA={testAA:.4f} test KPA={testKappa:.4f}]\ntest peracc=[{acc_str}]")
+            f"Training runs:{curr_seed + 1}\n[test loss={test OA={testOA:.4f} test AA={testAA:.4f} test KPA={testKappa:.4f}]\ntest peracc=[{acc_str}]")
     OA_ALL.append(testOA.cpu() if torch.is_tensor(testOA) else testOA)
     AA_ALL.append(testAA)
     KPP_ALL.append(testKappa)
@@ -110,6 +108,7 @@ print('OA=', np.mean(OA_ALL)*100, '+-', np.std(OA_ALL)*100)
 print('AA=', np.mean(AA_ALL)*100, '+-', np.std(AA_ALL)*100)
 print('Kpp=', np.mean(KPP_ALL)*100, '+-', np.std(KPP_ALL)*100)
 print('AVG=', np.mean(AVG_ALL, 0), '+-', np.std(AVG_ALL, 0))
+
 
 
 
