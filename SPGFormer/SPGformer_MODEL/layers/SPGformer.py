@@ -93,7 +93,7 @@ class MMPN(MessagePassing):
         if self.ln:
             self.ln_layer = nn.LayerNorm(input_dim)
         self.edge_index, self.edge_value = self.pre_get_adjceny(A)
-        self.import_edge_index, self.import_edge_value = self.pre_get_adjceny(getimportA(A, k=6, FLAG=flag))  # 6T,5F,5F
+        self.import_edge_index, self.import_edge_value = self.pre_get_adjceny(getimportA(A, k=6, FLAG=flag))  
 
         self.reset_parameters()
 
@@ -227,5 +227,6 @@ class SPG(nn.Module):
         x = x.reshape([self.height * self.width, -1])
         x = (self.BN(self.prelin(x)))
         H1 = self.HypMMPN(x) + self.Pixel_spareformer_Branch(x)
+
 
         return H1
