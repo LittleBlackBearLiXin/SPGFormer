@@ -1,5 +1,5 @@
 # SPGFormer: A Sparse Graph Transformer for Hyperspectral Image Classification
-# IEEE Transactions on Geoscience and Remote Sensing for consideration.
+# IEEE Transactions on Geoscience and Remote Sensing.
 
 #Now that you're all here, don't forget to click on the little star!!!!!!!!!!!!!!!!!!!!!!!
 
