@@ -19,4 +19,4 @@
 
 
 
-#If you need any assistance, please contact: lixin17808627537@163.com
+#If you need any assistance, please contact: lixin17808627537@163.com or lisxin@hrbeu.edu.cn.
